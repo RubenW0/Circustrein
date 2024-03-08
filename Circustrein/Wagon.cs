@@ -3,30 +3,67 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Circustrein.Animal;
 
 namespace Circustrein
 {
     internal class Wagon
     {
-        private int Points {  get; set; }
+
+        private List<Animal> animals;
+
+
+
+
 
         public Wagon()
         {
-            Points = 0;
+            animals = new List<Animal>();
         }
 
-        public bool AddPoints(int pointsToAdd)
+        public void AddAnimal(Animal animal)
         {
-            if (Points + pointsToAdd <= 10)
+            animals.Add(animal);
+        }
+
+        public List<Animal> GetAnimals()
+        {
+            return animals;
+        }
+
+        public int GetTotalPoints()
+        {
+            int totalPoints = 0;
+            foreach (var animal in animals)
             {
-                Points = Points + pointsToAdd;
-                return true;
+                totalPoints += animal.GetPoints();
             }
-            else
+            return totalPoints;
+        }
+
+        public bool CanAddAnimal(Animal animal)
+        {
+            if (GetTotalPoints() + animal.GetPoints() > 10)
             {
                 return false;
             }
-        }
 
+            for (int i = 0; i < animals.Count; i++)
+            {
+                if (animals[i].GetDiet() == Animal.Diet.Carnivore && (int)animals[i].GetSize() >= (int)animal.GetSize())
+                {
+                    return false;
+                }
+
+                if (animal.GetDiet() == Animal.Diet.Carnivore && (int)animals[i].GetSize() <= (int)animal.GetSize())
+                {
+                    return false;
+                }
+            }
+            return true;
+
+            
+
+        }
     }
 }

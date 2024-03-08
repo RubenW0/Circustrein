@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace Circustrein
 {
-    internal class Animal
+    public class Animal
     {
+        public enum Diet
+        {
+            Carnivore,
+            Herbivore
+        }
+
+        public enum Size
+        {
+            Small=1,
+            Medium=3,
+            Large=5
+        }
 
         private Diet AnimalDiet { get; set; }
         private Size AnimalSize { get; set; }
@@ -18,8 +30,26 @@ namespace Circustrein
             AnimalSize = size;
         }
 
-        
+        public Diet GetDiet()
+        {
+            return AnimalDiet;
+        }
 
+        public Size GetSize()
+        {
+            return AnimalSize;
+        }
+
+
+        public int GetPoints()
+        {
+            return (int)AnimalSize;
+        }
+
+        public bool CanEat(Animal other)
+        {
+            return AnimalDiet == Diet.Carnivore && AnimalSize >= other.AnimalSize;
+        }
 
 
 

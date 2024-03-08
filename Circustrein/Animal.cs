@@ -46,11 +46,6 @@ namespace Circustrein
             return (int)AnimalSize;
         }
 
-        public bool CanEat(Animal other)
-        {
-            return AnimalDiet == Diet.Carnivore && AnimalSize >= other.AnimalSize;
-        }
-
 
 
 

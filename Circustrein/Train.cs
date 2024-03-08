@@ -8,8 +8,10 @@ namespace Circustrein
 {
     internal class Train
     {
+        
         private List<Wagon> wagonList;
         private List<Animal> animals;
+        
 
         public Train()
         {
@@ -49,7 +51,13 @@ namespace Circustrein
             {
                 animals.Add(new Animal(Animal.Diet.Herbivore, Animal.Size.Large));
             }
-            
+
+
+            animals = animals.OrderBy(animal =>
+            {
+                int dietValue = animal.GetDiet() == Animal.Diet.Carnivore ? 0 : 1;
+                return (int)animal.GetSize() * 10 + dietValue;
+            }).ToList();
 
         }
 

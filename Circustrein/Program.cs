@@ -2,6 +2,7 @@
 
 
 using Circustrein;
+using System.Globalization;
 
 class Program
 {
@@ -39,9 +40,18 @@ class Program
         train.CreateAnimals(numberSmallCarnivores, numberMediumCarnivores, numberLargeCarnivores,
                             numberSmallHerbivores, numberMediumHerbivores, numberLargeHerbivores);
 
+        //sort1
+        //sort2
+        //2x met beide sort
+        //vergelijken
+        // Step 3: Fill wagons
+
+
         train.FillWagons();
 
         train.PrintDistribution();
+
+        
 
         static int GetIntInput()
         {

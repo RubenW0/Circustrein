@@ -12,10 +12,6 @@ namespace Circustrein
 
         private List<Animal> animals;
 
-
-
-
-
         public Wagon()
         {
             animals = new List<Animal>();

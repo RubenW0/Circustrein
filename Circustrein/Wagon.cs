@@ -7,30 +7,30 @@ using static Circustrein.Animal;
 
 namespace Circustrein
 {
-    internal class Wagon
+    public class Wagon
     {
 
-        private List<Animal> animals;
+        private List<Animal> animalsInWagon;
 
         public Wagon()
         {
-            animals = new List<Animal>();
+            animalsInWagon = new List<Animal>();
         }
 
         public void AddAnimal(Animal animal)
         {
-            animals.Add(animal);
+            animalsInWagon.Add(animal);
         }
 
         public List<Animal> GetAnimals()
         {
-            return animals;
+            return animalsInWagon;
         }
 
         public int GetTotalPoints()
         {
             int totalPoints = 0;
-            foreach (var animal in animals)
+            foreach (var animal in animalsInWagon)
             {
                 totalPoints += animal.GetPoints();
             }
@@ -44,22 +44,26 @@ namespace Circustrein
                 return false;
             }
 
-            for (int i = 0; i < animals.Count; i++)
+            for (int i = 0; i < animalsInWagon.Count; i++)
             {
-                if (animals[i].GetDiet() == Animal.Diet.Carnivore && (int)animals[i].GetSize() >= (int)animal.GetSize())
+                if (animalsInWagon[i].GetDiet() == Animal.Diet.Carnivore && (int)animalsInWagon[i].GetSize() >= (int)animal.GetSize())
                 {
                     return false;
                 }
 
-                if (animal.GetDiet() == Animal.Diet.Carnivore && (int)animals[i].GetSize() <= (int)animal.GetSize())
+                if (animal.GetDiet() == Animal.Diet.Carnivore && (int)animalsInWagon[i].GetSize() <= (int)animal.GetSize())
                 {
                     return false;
                 }
             }
+            animalsInWagon.Add(animal);
             return true;
 
-            
+
 
         }
+
+
+
     }
 }

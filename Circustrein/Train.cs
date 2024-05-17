@@ -6,20 +6,27 @@ using System.Threading.Tasks;
 
 namespace Circustrein
 {
-    internal class Train
+    public class Train
     {
         
         private List<Wagon> wagonList;
+
         private List<Animal> animals;
-        
+        private List<Animal> animalsAscending;
+        private List<Animal> animalsDescending;
+
+        public int NumberOfWagons { get { return wagonList.Count; } }
 
         public Train()
         {
             wagonList = new List<Wagon>();
             animals = new List<Animal>();
+            animalsAscending = new List<Animal>(); // Initialize the list
+            animalsDescending = new List<Animal>(); // Initialize the list
+
         }
 
-        public void CreateAnimals(int numberSmallCarnivores, int numberMediumCarnivores, int numberLargeCarnivores, int numberSmallHerbivores,int numberMediumHerbivores, int numberLargeHerbivores)
+        public void CreateAnimals(int numberSmallCarnivores, int numberMediumCarnivores, int numberLargeCarnivores, int numberSmallHerbivores, int numberMediumHerbivores, int numberLargeHerbivores)
         {
 
             for (int i = 0; i < numberSmallCarnivores; i++)
@@ -39,7 +46,7 @@ namespace Circustrein
 
             for (int i = 0; i < numberSmallHerbivores; i++)
             {
-                 animals.Add(new Animal(Animal.Diet.Herbivore, Animal.Size.Small));
+                animals.Add(new Animal(Animal.Diet.Herbivore, Animal.Size.Small));
             }
 
             for (int i = 0; i < numberMediumHerbivores; i++)
@@ -53,38 +60,98 @@ namespace Circustrein
             }
 
 
-            animals = animals.OrderBy(animal =>
+            animalsAscending = animals.OrderBy(animal =>
             {
                 int dietValue = animal.GetDiet() == Animal.Diet.Carnivore ? 0 : 1;
-                return (int)animal.GetSize() * 10 + dietValue;
+                return (int)animal.GetSize() + dietValue;
             }).ToList();
 
+
         }
 
-        public void FillWagons()
+        public void CreateAnimalsDescending(int numberSmallCarnivores, int numberMediumCarnivores, int numberLargeCarnivores, int numberSmallHerbivores, int numberMediumHerbivores, int numberLargeHerbivores)
         {
-            foreach (var animal in animals)
+
+            for (int i = 0; i < numberSmallCarnivores; i++)
             {
-                bool addedToExistingWagon = false;
+                animalsDescending.Add(new Animal(Animal.Diet.Carnivore, Animal.Size.Small));
+            }
 
-                foreach (var wagon in wagonList)
-                {
-                    if (wagon.CanAddAnimal(animal))
-                    {
-                        wagon.AddAnimal(animal);
-                        addedToExistingWagon = true;
-                        break;
-                    }
-                }
+            for (int i = 0; i < numberMediumCarnivores; i++)
+            {
+                animalsDescending.Add(new Animal(Animal.Diet.Carnivore, Animal.Size.Medium));
+            }
 
-                if (addedToExistingWagon == false)
-                {
-                    var newWagon = new Wagon();
-                    newWagon.AddAnimal(animal);
-                    wagonList.Add(newWagon);
-                }
+            for (int i = 0; i < numberLargeCarnivores; i++)
+            {
+                animalsDescending.Add(new Animal(Animal.Diet.Carnivore, Animal.Size.Large));
+            }
+
+            for (int i = 0; i < numberLargeHerbivores; i++)
+            {
+                animalsDescending.Add(new Animal(Animal.Diet.Herbivore, Animal.Size.Large));
+            }
+
+            for (int i = 0; i < numberMediumHerbivores; i++)
+            {
+                animalsDescending.Add(new Animal(Animal.Diet.Herbivore, Animal.Size.Medium));
+            }
+
+
+            for (int i = 0; i < numberSmallHerbivores; i++)
+            {
+                animalsDescending.Add(new Animal(Animal.Diet.Herbivore, Animal.Size.Small));
+            }
+
+
+
+        }
+
+        public void PlaceAnimalsInWagonsByOrderAndChooseTheMostEfficient()
+        {
+
+
+            if (PlaceAnimalsInWagons(animalsAscending) <= PlaceAnimalsInWagons(animalsDescending))
+            {
+                PlaceAnimalsInWagons(animalsAscending);
+            }
+            else
+            {
+                PlaceAnimalsInWagons(animalsDescending);
             }
         }
+        private int PlaceAnimalsInWagons(List<Animal> animals)
+        {
+            wagonList.Clear();
+            foreach (var animal in animals)
+            {
+                if (!TryToAddAnimalToExistingWagons(animal))
+                {
+                    AddAnimalToNewWagon(animal);
+                }
+            }
+            return wagonList.Count;
+        }
+
+        private void AddAnimalToNewWagon(Animal animal)
+        {
+            Wagon wagon = new Wagon();
+            wagonList.Add(wagon);
+            wagon.CanAddAnimal(animal);
+        }
+
+        private bool TryToAddAnimalToExistingWagons(Animal animal)
+        {
+            foreach (var wagon in wagonList)
+            {
+                if (wagon.CanAddAnimal(animal))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         public void PrintDistribution()
         {
